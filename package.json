@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "description": "Future Perfect API",
-  "main": "index.js",
+  "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +11,8 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "jsrsasign": "^10.8.6"
+    "jsrsasign": "^10.8.6",
+    "mongoose": "^7.1.0",
+    "nodemon": "^2.0.22"
   }
 }
