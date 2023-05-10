@@ -18,6 +18,6 @@ const schema = new Schema(
   }
 );
 
-const DB = mongoose.model("DB", schema);
+const Link = mongoose.model("Link", schema);
 
-export default DB;
+export default Link;

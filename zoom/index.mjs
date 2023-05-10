@@ -3,7 +3,7 @@ import KJUR from "jsrsasign";
 
 const router = express.Router();
 
-// send jwt
+// send zoom jwt
 router.post("/jwt", async (req, res) => {
   const iat = Math.round(new Date().getTime() / 1000) - 30;
   const exp = iat + 60 * 60 * 2;
