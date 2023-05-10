@@ -13,7 +13,7 @@ router.post("/create", async (req, res) => {
   try {
     const savedDb = await db.save();
     res.send({
-      url: `${process.env.DOMAIN}/link/${savedDb._id}`,
+      url: `${process.env.DOMAIN}/api/link/${savedDb._id}`,
     });
   } catch (err) {
     res.status(500).send(err);
