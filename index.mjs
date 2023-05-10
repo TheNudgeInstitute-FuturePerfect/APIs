@@ -20,6 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/zoom", zoom);
 app.use("/api/link", link);
 
-app.listen(process.env.PORT, () => {
-  console.log(`API listening on port ${process.env.PORT}!`);
+app.listen(process.env.API_PORT, () => {
+  console.log(`API listening on port ${process.env.API_PORT}!`);
 });
