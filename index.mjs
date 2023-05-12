@@ -3,9 +3,11 @@ dotenv.config();
 
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 
 import zoom from "./zoom/index.mjs";
 import link from "./link/index.mjs";
+import transcribe from "./transcribe/index.mjs";
 
 const app = express();
 
@@ -17,8 +19,11 @@ mongoose.connect("mongodb://localhost/api", {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors());
+
 app.use("/api/zoom", zoom);
 app.use("/api/link", link);
+app.use("/api/transcribe", transcribe);
 
 app.listen(process.env.API_PORT, () => {
   console.log(`API listening on port ${process.env.API_PORT}!`);
