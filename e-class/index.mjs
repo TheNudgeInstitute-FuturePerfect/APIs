@@ -1,5 +1,6 @@
 import express from "express";
 import KJUR from "jsrsasign";
+import Meeting from "./models/meeting.mjs";
 
 const router = express.Router();
 
@@ -34,4 +35,21 @@ router.post("/jwt", async (req, res) => {
   });
 });
 
+router.post("/meeting/update", async (req, res) => {
+  const name = req.body.name;
+  const meetingId = req.body.meetingId;
+  const talktime = req.body.talktime;
+  let meeting = await Meeting.findOne({ meetingId: meetingId, name: name });
+  if (meeting) {
+    meeting.talktime = meeting.talktime + talktime;
+    await meeting.save();
+  } else {
+    meeting = await Meeting.create({
+      meetingId: meetingId,
+      name: name,
+      talktime: talktime,
+    });
+  }
+  res.json({ meeting });
+});
 export default router;
