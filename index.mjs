@@ -5,9 +5,9 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 
-import zoom from "./zoom/index.mjs";
+import eclass from "./e-class/index.mjs";
 import link from "./link/index.mjs";
-import transcribe from "./transcribe/index.mjs";
+import talknote from "./talk-note/index.mjs";
 
 const app = express();
 
@@ -21,9 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-app.use("/api/zoom", zoom);
+app.use("/api/e-class", eclass);
 app.use("/api/link", link);
-app.use("/api/transcribe", transcribe);
+app.use("/api/talk-note", talknote);
 
 app.listen(process.env.API_PORT, () => {
   console.log(`API listening on port ${process.env.API_PORT}!`);

@@ -17,7 +17,7 @@ const s3 = new S3Client({
 
 const s3Storage = multerS3({
   s3: s3, // s3 instance
-  bucket: process.env.AWS_BUCKET_NAME || "future-perfect-uat", // change it as per your project requirement
+  bucket: process.env.AWS_BUCKET_NAME, // change it as per your project requirement
   acl: "public-read", // storage access type
   metadata: (req, file, cb) => {
     cb(null, { fieldname: file.fieldname });
@@ -25,7 +25,7 @@ const s3Storage = multerS3({
   key: (req, file, cb) => {
     const fileName = Date.now();
     const ext = path.extname(file.originalname.toLowerCase());
-    cb(null, "speaker-diarization/upload/" + fileName + ext);
+    cb(null, "talk-note/upload/" + fileName + ext);
   },
 });
 

@@ -15,7 +15,7 @@ router.post(
       console.log(req.file);
       const transcribeJobName = `${new Date().getTime()}`;
       const bucketName = process.env.AWS_BUCKET_NAME;
-      const bucketKey = `speaker-diarization/transcript/${new Date().getTime()}.json`;
+      const bucketKey = `talk-note/transcript/${new Date().getTime()}.json`;
 
       data.image = req.file.location;
 

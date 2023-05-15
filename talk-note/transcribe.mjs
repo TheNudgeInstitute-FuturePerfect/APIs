@@ -4,7 +4,7 @@ import {
   TranscribeClient,
 } from "@aws-sdk/client-transcribe";
 import promiseRetry from "promise-retry";
-console.log("transcribe", process.env.AWS_REGION);
+
 async function transcribe(
   jobName,
   mediaUri,
