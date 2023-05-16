@@ -4,9 +4,8 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
   {
-    meetingId: String,
-    name: String,
-    talktime: { type: Number, default: 0 },
+    meetingId: { type: String, required: true },
+    name: { type: String },
   },
   {
     timestamps: true,
