@@ -75,7 +75,7 @@ router.post("/meeting/:meetingId/participant", async (req, res) => {
   // create meeting if not found
   if (meeting === null) {
     meeting = await Meeting.create({
-      meetingId: id,
+      meetingId: meetingId,
     });
   }
   // find participant
@@ -90,7 +90,7 @@ router.post("/meeting/:meetingId/participant", async (req, res) => {
   } else {
     // create participant if not found
     participant = await Participant.create({
-      meeting: id,
+      meeting: meetingId,
       name: name,
       talktime: talktime,
     });
