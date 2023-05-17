@@ -2,7 +2,9 @@ import express from "express";
 import KJUR from "jsrsasign";
 import Meeting from "./models/meeting.mjs";
 import Participant from "./models/participant.mjs";
+import mongoose from "mongoose";
 
+const ObjectId = mongoose.Types.ObjectId;
 const router = express.Router();
 
 // send zoom jwt
@@ -55,7 +57,7 @@ router.get("/participants", async (req, res) => {
   const skip = (page - 1) * limit;
   const totalDocuments = await Participant.countDocuments();
   const totalPages = Math.ceil(totalDocuments / limit);
-  if (meetingId) filters.meeting = meetingId;
+  if (meetingId) filters.meeting = new ObjectId(meetingId);
   if (name)
     filters.name = {
       $regex: new RegExp(".*" + name + ".*", "i"),
