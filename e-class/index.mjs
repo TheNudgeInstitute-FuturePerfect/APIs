@@ -90,7 +90,7 @@ router.post("/meeting/:meetingId/participant", async (req, res) => {
   } else {
     // create participant if not found
     participant = await Participant.create({
-      meeting: meetingId,
+      meeting: meeting._id,
       name: name,
       talktime: talktime,
     });
