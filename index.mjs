@@ -8,6 +8,7 @@ import cors from "cors";
 import eclass from "./e-class/index.mjs";
 import link from "./link/index.mjs";
 import talknote from "./talk-note/index.mjs";
+import telegramclient from "./telegram-client/index.mjs";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(cors());
 app.use("/api/e-class", eclass);
 app.use("/api/link", link);
 app.use("/api/talk-note", talknote);
+app.use("/api/telegram-client", telegramclient);
 
 app.listen(process.env.API_PORT, () => {
   console.log(`API listening on port ${process.env.API_PORT}!`);
