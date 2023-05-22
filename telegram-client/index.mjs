@@ -77,4 +77,51 @@ router.post("/event", async (req, res) => {
   res.json({ success: true });
 });
 
+router.get("/video-chat", async (req, res) => {
+  const filter = {};
+  const { page = 1, limit = 2, callId } = req.query;
+  const skip = (page - 1) * limit;
+
+  if (callId) filter.callId = callId;
+
+  const totalDocuments = await TelegramVideoChat.countDocuments(filter);
+  const totalPages = Math.ceil(totalDocuments / limit);
+
+  const data = await TelegramVideoChat.find(filter)
+    .skip(skip)
+    .limit(parseInt(limit));
+
+  res.json({
+    data,
+    currentPage: parseInt(page),
+    totalPages,
+    totalDocuments,
+  });
+});
+
+router.get("/video-chat-participant", async (req, res) => {
+  const filter = {};
+  const { page = 1, limit = 2, callId, userId } = req.query;
+  const skip = (page - 1) * limit;
+
+  if (callId) filter.callId = callId;
+  if (userId) filter.userId = userId;
+
+  const totalDocuments = await TelegramVideoChatParticipant.countDocuments(
+    filter
+  );
+  const totalPages = Math.ceil(totalDocuments / limit);
+
+  const data = await TelegramVideoChatParticipant.find(filter)
+    .skip(skip)
+    .limit(parseInt(limit));
+
+  res.json({
+    data,
+    currentPage: parseInt(page),
+    totalPages,
+    totalDocuments,
+  });
+});
+
 export default router;
