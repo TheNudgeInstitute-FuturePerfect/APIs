@@ -79,7 +79,7 @@ router.post("/event", async (req, res) => {
 
 router.get("/video-chat", async (req, res) => {
   const filter = {};
-  const { page = 1, limit = 2, callId } = req.query;
+  const { page = 1, limit = 50, callId } = req.query;
   const skip = (page - 1) * limit;
 
   if (callId) filter.callId = callId;
@@ -101,7 +101,7 @@ router.get("/video-chat", async (req, res) => {
 
 router.get("/video-chat-participant", async (req, res) => {
   const filter = {};
-  const { page = 1, limit = 2, callId, userId } = req.query;
+  const { page = 1, limit = 50, callId, userId } = req.query;
   const skip = (page - 1) * limit;
 
   if (callId) filter.callId = callId;
