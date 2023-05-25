@@ -64,6 +64,7 @@ router.get("/link/tracking", async (req, res) => {
   const totalPages = Math.ceil(totalDocuments / limit);
 
   const data = await GlowLinkTracking.find(filter)
+    .sort({ _id: -1 })
     .skip(skip)
     .limit(parseInt(limit));
 
