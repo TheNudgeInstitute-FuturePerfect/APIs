@@ -54,7 +54,7 @@ router.post("/link/tracking", async (req, res) => {
 
 router.get("/link/tracking", async (req, res) => {
   const filter = {};
-  const { page = 1, limit = 2, phone, session } = req.query;
+  const { page = 1, limit = 50, phone, session } = req.query;
   const skip = (page - 1) * limit;
 
   if (phone) filter.phone = phone;
