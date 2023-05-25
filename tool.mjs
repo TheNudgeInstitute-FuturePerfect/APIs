@@ -1,14 +1,6 @@
-let status;
-if (process.env.ENV) {
-  status = "disabled";
-} else {
-  status = "enabled";
-}
+let enabled = true;
+if (process.env.ENV) enabled = false;
 
 global.log = function (...args) {
-  if (status === "enabled") {
-    for (let i = 0; i < args.length; i++) {
-      console.log(args.join(" "));
-    }
-  }
+  if (enabled) console.log(...args);
 };
