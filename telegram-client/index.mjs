@@ -53,6 +53,10 @@ router.post("/event", async (req, res) => {
                 callId: call.id,
                 userId: participants[i].peer.user_id,
               });
+            // increment participants counter by 1
+            telegramVideoChat.numberOfparticipants =
+              telegramVideoChat.numberOfparticipants + 1;
+            await telegramVideoChat.save();
           }
           // left
           if (participants[i].left) {
