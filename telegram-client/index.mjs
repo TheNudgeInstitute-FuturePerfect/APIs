@@ -7,7 +7,7 @@ const router = express.Router();
 // receive telegram event
 router.post("/event", async (req, res) => {
   const { name, call, participants, chat_id } = req.body;
-  if (process.env.GROUP_IDS?.split(",")?.includes(String(chat_id))) {
+  if (process.env.TELEGRAM_GROUP_IDS?.split(",")?.includes(String(chat_id))) {
     // video call
     if (name === "UpdateGroupCall" && call) {
       // started
