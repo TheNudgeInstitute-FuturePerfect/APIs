@@ -7,9 +7,7 @@ const router = express.Router();
 // receive telegram event
 router.post("/event", async (req, res) => {
   const { name, call, participants, chat_id } = req.body;
-  // Jobcoach Dev - 1963078754
-  // Jobcoach UAT - 956265219
-  if ([1963078754, 956265219].includes(chat_id)) {
+  if (process.env.GROUP_IDS?.split(",")?.includes(String(chat_id))) {
     // video call
     if (name === "UpdateGroupCall" && call) {
       // started
@@ -73,7 +71,6 @@ router.post("/event", async (req, res) => {
       }
     }
   }
-  console.log(req.body);
   res.json({ success: true });
 });
 
@@ -88,6 +85,7 @@ router.get("/video-chat", async (req, res) => {
   const totalPages = Math.ceil(totalDocuments / limit);
 
   const data = await TelegramVideoChat.find(filter)
+    .sort({ _id: -1 })
     .skip(skip)
     .limit(parseInt(limit));
 
@@ -113,6 +111,7 @@ router.get("/video-chat-participant", async (req, res) => {
   const totalPages = Math.ceil(totalDocuments / limit);
 
   const data = await TelegramVideoChatParticipant.find(filter)
+    .sort({ _id: -1 })
     .skip(skip)
     .limit(parseInt(limit));
 
