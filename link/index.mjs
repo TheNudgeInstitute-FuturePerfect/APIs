@@ -34,7 +34,10 @@ router.get("/list", async (req, res) => {
   const totalDocuments = await Link.countDocuments(filter);
   const totalPages = Math.ceil(totalDocuments / limit);
 
-  const data = await Link.find(filter).skip(skip).limit(parseInt(limit));
+  const data = await Link.find(filter)
+    .sort({ _id: -1 })
+    .skip(skip)
+    .limit(parseInt(limit));
 
   res.json({
     data,
