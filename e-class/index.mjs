@@ -46,7 +46,10 @@ router.get("/meeting", async (req, res) => {
   const totalDocuments = await Meeting.countDocuments();
   const totalPages = Math.ceil(totalDocuments / limit);
   if (meetingId) filters.meetingId = meetingId;
-  let data = await Meeting.find(filters).skip(skip).limit(parseInt(limit));
+  let data = await Meeting.find(filters)
+    .sort({ _id: -1 })
+    .skip(skip)
+    .limit(parseInt(limit));
   res.json({ data, currentPage: parseInt(page), totalPages, totalDocuments });
 });
 
@@ -62,7 +65,10 @@ router.get("/participants", async (req, res) => {
     filters.name = {
       $regex: new RegExp(".*" + name + ".*", "i"),
     };
-  let data = await Participant.find(filters).skip(skip).limit(parseInt(limit));
+  let data = await Participant.find(filters)
+    .sort({ _id: -1 })
+    .skip(skip)
+    .limit(parseInt(limit));
   res.json({ data, currentPage: parseInt(page), totalPages, totalDocuments });
 });
 
