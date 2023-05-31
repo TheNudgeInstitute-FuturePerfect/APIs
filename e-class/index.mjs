@@ -43,9 +43,9 @@ router.get("/meeting", async (req, res) => {
   let filters = {};
   const { page = 1, limit = 2, meetingId } = req.query;
   const skip = (page - 1) * limit;
-  const totalDocuments = await Meeting.countDocuments();
-  const totalPages = Math.ceil(totalDocuments / limit);
   if (meetingId) filters.meetingId = meetingId;
+  const totalDocuments = await Meeting.countDocuments(filters);
+  const totalPages = Math.ceil(totalDocuments / limit);
   let data = await Meeting.find(filters)
     .sort({ _id: -1 })
     .skip(skip)
@@ -58,13 +58,13 @@ router.get("/participants", async (req, res) => {
   let filters = {};
   const { page = 1, limit = 2, meetingId, name } = req.query;
   const skip = (page - 1) * limit;
-  const totalDocuments = await Participant.countDocuments();
-  const totalPages = Math.ceil(totalDocuments / limit);
   if (meetingId) filters.meeting = new ObjectId(meetingId);
   if (name)
     filters.name = {
       $regex: new RegExp(".*" + name + ".*", "i"),
     };
+  const totalDocuments = await Participant.countDocuments(filters);
+  const totalPages = Math.ceil(totalDocuments / limit);
   let data = await Participant.find(filters)
     .sort({ _id: -1 })
     .skip(skip)
