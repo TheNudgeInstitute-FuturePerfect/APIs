@@ -21,7 +21,6 @@ async function downloadS3File(bucketName, bucketKey) {
       stream.on("error", reject);
       stream.on("end", () => {
         const data = Buffer.concat(chunks).toString("utf8");
-        console.log(data);
         resolve(JSON.parse(data).results.items);
       });
     });
