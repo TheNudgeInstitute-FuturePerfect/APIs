@@ -23,13 +23,26 @@ router.post("/create", async (req, res) => {
 // get list of all links with status and phone filter and limit and page
 router.get("/list", async (req, res) => {
   const filter = {};
-  const { page = 1, limit = 2, name, status, phone, url } = req.query;
+  const {
+    page = 1,
+    limit = 2,
+    name,
+    status,
+    phone,
+    url,
+    startDate,
+    endDate,
+  } = req.query;
   const skip = (page - 1) * limit;
 
   if (status) filter.status = status;
   if (url) filter.url = url;
   if (phone) filter.phone = { $in: phone.split(",") };
   if (name) filter.name = { $regex: new RegExp(".*" + name + ".*", "i") };
+  if (startDate) {
+    filter.createdAt = { $gte: startDate };
+  }
+  if (endDate) filter.createdAt = { ...filter.createdAt, $lte: endDate };
 
   const totalDocuments = await Link.countDocuments(filter);
   const totalPages = Math.ceil(totalDocuments / limit);

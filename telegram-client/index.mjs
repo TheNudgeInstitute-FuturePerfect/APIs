@@ -80,10 +80,14 @@ router.post("/event", async (req, res) => {
 
 router.get("/video-chat", async (req, res) => {
   const filter = {};
-  const { page = 1, limit = 50, callId } = req.query;
+  const { page = 1, limit = 50, callId, startDate, endDate } = req.query;
   const skip = (page - 1) * limit;
 
   if (callId) filter.callId = callId;
+  if (startDate) {
+    filter.createdAt = { $gte: startDate };
+  }
+  if (endDate) filter.createdAt = { ...filter.createdAt, $lte: endDate };
 
   const totalDocuments = await TelegramVideoChat.countDocuments(filter);
   const totalPages = Math.ceil(totalDocuments / limit);
@@ -103,11 +107,22 @@ router.get("/video-chat", async (req, res) => {
 
 router.get("/video-chat-participant", async (req, res) => {
   const filter = {};
-  const { page = 1, limit = 50, callId, userId } = req.query;
+  const {
+    page = 1,
+    limit = 50,
+    callId,
+    userId,
+    startDate,
+    endDate,
+  } = req.query;
   const skip = (page - 1) * limit;
 
   if (callId) filter.callId = callId;
   if (userId) filter.userId = userId;
+  if (startDate) {
+    filter.createdAt = { $gte: startDate };
+  }
+  if (endDate) filter.createdAt = { ...filter.createdAt, $lte: endDate };
 
   const totalDocuments = await TelegramVideoChatParticipant.countDocuments(
     filter

@@ -54,11 +54,22 @@ router.post("/link/tracking", async (req, res) => {
 
 router.get("/link/tracking", async (req, res) => {
   const filter = {};
-  const { page = 1, limit = 50, phone, session } = req.query;
+  const {
+    page = 1,
+    limit = 50,
+    phone,
+    session,
+    startDate,
+    endDate,
+  } = req.query;
   const skip = (page - 1) * limit;
 
   if (phone) filter.phone = phone;
   if (session) filter.session = session;
+  if (startDate) {
+    filter.createdAt = { $gte: startDate };
+  }
+  if (endDate) filter.createdAt = { ...filter.createdAt, $lte: endDate };
 
   const totalDocuments = await GlowLinkTracking.countDocuments(filter);
   const totalPages = Math.ceil(totalDocuments / limit);
