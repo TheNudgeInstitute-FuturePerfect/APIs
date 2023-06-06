@@ -40,11 +40,12 @@ router.post("/feedback", async (req, res) => {
 
 router.post("/link/tracking", async (req, res) => {
   log("POST Glow Link Tracking", req.body.phone, req.body.session);
-  const { phone, session } = req.body;
+  const { phone, session, activity } = req.body;
   if (phone && session) {
     const glowLinkTracking = await GlowLinkTracking.create({
       phone: phone,
       session: session,
+      activity: activity,
     });
     res.send({ glowLinkTracking });
   } else {
