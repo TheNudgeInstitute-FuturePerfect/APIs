@@ -1,6 +1,7 @@
 import express from "express";
 import axios from "axios";
 import GlowLinkTracking from "./models/link.mjs";
+import { isValidObjectId } from "mongoose";
 
 const router = express.Router();
 
@@ -86,6 +87,13 @@ router.get("/link/tracking", async (req, res) => {
     totalPages,
     totalDocuments,
   });
+});
+
+router.delete("/link/tracking/:id", async (req, res) => {
+  if (isValidObjectId(req.params.id) === false)
+    res.send({ error: "Invalid Object ID" });
+  if (isValidObjectId(req.params.id))
+    res.send(await GlowLinkTracking.findByIdAndDelete(req.params.id));
 });
 
 export default router;
