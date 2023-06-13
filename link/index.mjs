@@ -23,6 +23,7 @@ router.post("/create", async (req, res) => {
 // get list of all links with status and phone filter and limit and page
 router.get("/list", async (req, res) => {
   const filter = {};
+  let skip, data;
   const {
     page = 1,
     limit = 2,
@@ -33,7 +34,9 @@ router.get("/list", async (req, res) => {
     startDate,
     endDate,
   } = req.query;
-  const skip = (page - 1) * limit;
+
+  if (limit === "none") skip = 0;
+  else skip = (page - 1) * limit;
 
   if (status) filter.status = status;
   if (url) filter.url = url;
@@ -45,12 +48,14 @@ router.get("/list", async (req, res) => {
   if (endDate) filter.createdAt = { ...filter.createdAt, $lte: endDate };
 
   const totalDocuments = await Link.countDocuments(filter);
-  const totalPages = Math.ceil(totalDocuments / limit);
+  const totalPages = limit === "none" ? 1 : Math.ceil(totalDocuments / limit);
 
-  const data = await Link.find(filter)
-    .sort({ _id: -1 })
-    .skip(skip)
-    .limit(parseInt(limit));
+  if (limit === "none") data = await Link.find(filter).sort({ _id: -1 });
+  else
+    data = await Link.find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
 
   res.json({
     data,

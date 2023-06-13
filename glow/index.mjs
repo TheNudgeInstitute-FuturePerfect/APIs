@@ -56,6 +56,7 @@ router.post("/link/tracking", async (req, res) => {
 
 router.get("/link/tracking", async (req, res) => {
   const filter = {};
+  let skip, data;
   const {
     page = 1,
     limit = 50,
@@ -64,7 +65,9 @@ router.get("/link/tracking", async (req, res) => {
     startDate,
     endDate,
   } = req.query;
-  const skip = (page - 1) * limit;
+
+  if (limit === "none") skip = 0;
+  else skip = (page - 1) * limit;
 
   if (phone) filter.phone = phone;
   if (session) filter.session = session;
@@ -74,12 +77,14 @@ router.get("/link/tracking", async (req, res) => {
   if (endDate) filter.createdAt = { ...filter.createdAt, $lte: endDate };
 
   const totalDocuments = await GlowLinkTracking.countDocuments(filter);
-  const totalPages = Math.ceil(totalDocuments / limit);
-
-  const data = await GlowLinkTracking.find(filter)
-    .sort({ _id: -1 })
-    .skip(skip)
-    .limit(parseInt(limit));
+  const totalPages = limit === "none" ? 1 : Math.ceil(totalDocuments / limit);
+  if (limit === "none")
+    data = await GlowLinkTracking.find(filter).sort({ _id: -1 });
+  else
+    data = await GlowLinkTracking.find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
 
   res.json({
     data,

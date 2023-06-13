@@ -80,8 +80,10 @@ router.post("/event", async (req, res) => {
 
 router.get("/video-chat", async (req, res) => {
   const filter = {};
+  let skip, data;
   const { page = 1, limit = 50, callId, startDate, endDate } = req.query;
-  const skip = (page - 1) * limit;
+  if (limit === "none") skip = 0;
+  else skip = (page - 1) * limit;
 
   if (callId) filter.callId = callId;
   if (startDate) {
@@ -90,12 +92,15 @@ router.get("/video-chat", async (req, res) => {
   if (endDate) filter.createdAt = { ...filter.createdAt, $lte: endDate };
 
   const totalDocuments = await TelegramVideoChat.countDocuments(filter);
-  const totalPages = Math.ceil(totalDocuments / limit);
+  const totalPages = limit === "none" ? 1 : Math.ceil(totalDocuments / limit);
 
-  const data = await TelegramVideoChat.find(filter)
-    .sort({ _id: -1 })
-    .skip(skip)
-    .limit(parseInt(limit));
+  if (limit === "none")
+    data = await TelegramVideoChat.find(filter).sort({ _id: -1 });
+  else
+    data = await TelegramVideoChat.find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
 
   res.json({
     data,
@@ -107,6 +112,7 @@ router.get("/video-chat", async (req, res) => {
 
 router.get("/video-chat-participant", async (req, res) => {
   const filter = {};
+  let skip, data;
   const {
     page = 1,
     limit = 50,
@@ -115,7 +121,8 @@ router.get("/video-chat-participant", async (req, res) => {
     startDate,
     endDate,
   } = req.query;
-  const skip = (page - 1) * limit;
+  if (limit === "none") skip = 0;
+  else skip = (page - 1) * limit;
 
   if (callId) filter.callId = callId;
   if (userId) filter.userId = userId;
@@ -127,12 +134,15 @@ router.get("/video-chat-participant", async (req, res) => {
   const totalDocuments = await TelegramVideoChatParticipant.countDocuments(
     filter
   );
-  const totalPages = Math.ceil(totalDocuments / limit);
+  const totalPages = limit === "none" ? 1 : Math.ceil(totalDocuments / limit);
 
-  const data = await TelegramVideoChatParticipant.find(filter)
-    .sort({ _id: -1 })
-    .skip(skip)
-    .limit(parseInt(limit));
+  if (limit === "none")
+    data = await TelegramVideoChatParticipant.find(filter).sort({ _id: -1 });
+  else
+    data = await TelegramVideoChatParticipant.find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
 
   res.json({
     data,
