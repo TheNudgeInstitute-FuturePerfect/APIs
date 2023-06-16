@@ -3,6 +3,7 @@ import KJUR from "jsrsasign";
 import Meeting from "./models/meeting.mjs";
 import Participant from "./models/participant.mjs";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
 const ObjectId = mongoose.Types.ObjectId;
 const router = express.Router();
@@ -36,6 +37,22 @@ router.post("/jwt", async (req, res) => {
   res.json({
     signature: signature,
   });
+});
+
+// send zoom android jwt
+router.post("/android/jwt", async (_req, res) => {
+  const payload = {
+    appKey: process.env.ZOOM_MEETING_SDK_KEY,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 3600, // Expiration time (1 hour from now)
+    tokenExp: Math.floor(Date.now() / 1000) + 3600,
+  };
+
+  const jwtToken = jwt.sign(payload, process.env.ZOOM_MEETING_SDK_SECRET, {
+    algorithm: "HS256",
+  });
+
+  res.json({ jwtToken });
 });
 
 // get meetings
