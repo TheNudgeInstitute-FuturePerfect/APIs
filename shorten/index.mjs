@@ -47,5 +47,20 @@ router.get("/list", async (req, res) => {
   });
 });
 
+// shorten redirect to original link
+router.get("/:id", async (req, res) => {
+  const db = await Link.findById(req.params.id);
+  if (db) {
+    res.redirect(301, db.url);
+  } else {
+    res.set("Content-Type", "text/html");
+    res.send(
+      Buffer.from(
+        `<h2 style="text-align: center; margin-top: 5%">Link doesn't exist</h2>`
+      )
+    );
+  }
+});
+
 
 export default router;
