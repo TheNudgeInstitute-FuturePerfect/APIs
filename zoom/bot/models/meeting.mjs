@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
   {
-    id: String,
-    password: String,
+    id: {type: String, required: true},
+    password: {type: String, required: true},
     datetime: Date,
   }
 );
