@@ -4,12 +4,11 @@ import Event from "./models/event.mjs";
 
 const router = express.Router();
 
-// create new meeting using id, password and datetime
+// create new meeting using meetingId, password
 router.post("/meeting/create", async (req, res) => {
   const db = new Meeting({
-    id: req.body.id,
-    password: req.body.password,
-    datetime: req.body.datetime,
+    meetingId: req.body.meetingId,
+    passcode: req.body.passcode,
   });
   try {
     const savedDb = await db.save();
@@ -19,18 +18,16 @@ router.post("/meeting/create", async (req, res) => {
   }
 });
 
-// get list of all meetings with datetime filter and limit and page
+// get list of all meetings with status filter limit and page
 router.get("/meeting/list", async (req, res) => {
   const filter = {};
   let skip, data;
-  const { page = 1, limit = 2, datetime } = req.query;
+  const { page = 1, limit = 2, status } = req.query;
 
   if (limit === "none") skip = 0;
   else skip = (page - 1) * limit;
 
-  if (datetime) {
-    filter.datetime = { $gte: datetime };
-  }
+  if (status) filter.status = status;
 
   const totalDocuments = await Meeting.countDocuments(filter);
   const totalPages = limit === "none" ? 1 : Math.ceil(totalDocuments / limit);
@@ -53,7 +50,7 @@ router.get("/meeting/list", async (req, res) => {
 // update meeting status
 router.post("/meeting/update", async (req, res) => {
   const { id, status } = req.body;
-  const db = await Event.findById(id);
+  const db = await Meeting.findById(id);
   if (db) {
     db.status = status;
     await db.save();

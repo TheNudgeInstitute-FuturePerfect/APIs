@@ -4,9 +4,8 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
   {
-    id: {type: String, required: true},
-    password: {type: String, required: true},
-    datetime: Date,
+    meetingId: {type: String, required: true},
+    passcode: {type: String, required: true},
     status: {
       type: String,
       enum: ["schedule", "joined"],
