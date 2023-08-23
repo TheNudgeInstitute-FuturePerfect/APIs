@@ -50,6 +50,19 @@ router.get("/meeting/list", async (req, res) => {
   });
 });
 
+// update meeting status
+router.post("/meeting/update", async (req, res) => {
+  const { id, status } = req.body;
+  const db = await Event.findById(id);
+  if (db) {
+    db.status = status;
+    await db.save();
+    res.send(db);
+  } else {
+    res.status(404).send({ error: "meeting not found" });
+  }
+});
+
 // create new event using name
 router.post("/event/create", async (req, res) => {
   const db = new Event({
@@ -95,7 +108,6 @@ router.get("/event/list", async (req, res) => {
 // update event status
 router.post("/event/update", async (req, res) => {
   const { id, status } = req.body;
-  console.log(id)
   const db = await Event.findById(id);
   if (db) {
     db.status = status;
