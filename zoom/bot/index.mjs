@@ -86,16 +86,16 @@ router.post("/event/create", async (req, res) => {
   }
 });
 
-// get list of all events with empty handledBy and limit and page
+// get list of all events which do not have bot in handledBy and limit and page
 router.get("/event/list", async (req, res) => {
   const filter = {};
   let skip, data;
-  const { page = 1, limit = 2 } = req.query;
+  const { page = 1, limit = 2, bot } = req.query;
 
   if (limit === "none") skip = 0;
   else skip = (page - 1) * limit;
 
-  filter.handledBy = { $size: 0 };
+  filter.handledBy = { $nin: [bot] };
 
   const totalDocuments = await Event.countDocuments(filter);
   const totalPages = limit === "none" ? 1 : Math.ceil(totalDocuments / limit);
