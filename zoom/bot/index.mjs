@@ -138,9 +138,10 @@ router.get("/aws/ec2/instances", async (req, res) => {
 // set
 router.post("/aws/ec2/instances", async (req, res) => {
   const { action, number } = req.body;
+  const instances = await getInstanceIDsByTagName();
 
   // Specify the instance ID of the EC2 instance you want to start
-  const instanceIds = ["i-060cf6db40b73e807"].slice(0, number);
+  const instanceIds = instances.map((instance) => instance.id).slice(0, number);
 
   // Define the parameters for starting the instance
   const params = {

@@ -10,12 +10,12 @@ AWS.config.update({
 const ec2 = new AWS.EC2();
 
 const getInstanceIDsByTagName = async () => {
-  const tagName = "ZoomBot";
+  const tagName = process.env.AWS_EC2_TAG_NAME;
 
   const params = {
     Filters: [
       {
-        Name: "tag:Name",
+        Name: "tag:Group",
         Values: [tagName],
       },
     ],
