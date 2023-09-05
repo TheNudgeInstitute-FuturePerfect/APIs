@@ -86,16 +86,16 @@ router.post("/event/create", async (req, res) => {
   }
 });
 
-// get list of all events with status filter and limit and page
+// get list of all events with empty handledBy and limit and page
 router.get("/event/list", async (req, res) => {
   const filter = {};
   let skip, data;
-  const { page = 1, limit = 2, status } = req.query;
+  const { page = 1, limit = 2 } = req.query;
 
   if (limit === "none") skip = 0;
   else skip = (page - 1) * limit;
 
-  if (status) filter.status = status;
+  filter.handledBy = { $size: 0 };
 
   const totalDocuments = await Event.countDocuments(filter);
   const totalPages = limit === "none" ? 1 : Math.ceil(totalDocuments / limit);
@@ -117,10 +117,10 @@ router.get("/event/list", async (req, res) => {
 
 // update event status
 router.post("/event/update", async (req, res) => {
-  const { id, status } = req.body;
+  const { id, bot } = req.body;
   const db = await Event.findById(id);
   if (db) {
-    db.status = status;
+    db.handledBy = [...db.handledBy, bot];
     await db.save();
     res.send(db);
   } else {
