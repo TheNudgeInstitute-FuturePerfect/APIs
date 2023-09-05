@@ -10,6 +10,8 @@ import link from "./link/index.mjs";
 import talknote from "./talk-note/index.mjs";
 import telegramclient from "./telegram-client/index.mjs";
 import glow from "./glow/index.mjs";
+import zoom from "./zoom/bot/index.mjs";
+import shorten from "./shorten/index.mjs";
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use("/api/link", link);
 app.use("/api/talk-note", talknote);
 app.use("/api/telegram-client", telegramclient);
 app.use("/api/glow", glow);
+app.use("/api/zoom/bot", zoom);
+app.use("/api/s", shorten);
 
 app.listen(process.env.API_PORT, () => {
   console.log(`API listening on port ${process.env.API_PORT}!`);
