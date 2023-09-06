@@ -72,6 +72,12 @@ router.post("/meeting/update", async (req, res) => {
   }
 });
 
+// clear meetings
+router.delete("/meeting/clear", async (req, res) => {
+  await Meeting.deleteMany({});
+  res.status(200).send({ message: "meetings cleared" });
+});
+
 // create new event using name
 router.post("/event/create", async (req, res) => {
   const db = new Event({
@@ -126,6 +132,11 @@ router.post("/event/update", async (req, res) => {
   } else {
     res.status(404).send({ error: "event not found" });
   }
+});
+// clear events
+router.delete("/event/clear", async (req, res) => {
+  await Event.deleteMany({});
+  res.status(200).send({ message: "events cleared" });
 });
 
 router.get("/aws/ec2/instances", async (req, res) => {
