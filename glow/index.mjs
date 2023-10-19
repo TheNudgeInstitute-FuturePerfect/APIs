@@ -23,7 +23,7 @@ router.get("/feedback", async (req, res) => {
           .catch((error) => res.status(500).send("Internal server error"));
       else
         _collection
-          .find({ ROWID: ObjectId(ROWID) })
+          .find({ ROWID: new ObjectId(ROWID) })
           .toArray()
           .then((data) => res.json({ data }))
           .catch((error) => res.status(500).send("Internal server error"));
