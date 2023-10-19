@@ -8,17 +8,24 @@ const router = express.Router();
 
 router.get("/feedback", async (req, res) => {
   log("GET Glow Feedback");
-  const { SessionID } = req.query;
+  const { collection, SessionID, ROWID } = req.query;
   connectToDatabase()
     .then(() => {
       const db = client.db("whatsapp-bots");
-      const collection = db.collection("sessions");
-      collection
-        .find({ SessionID, MessageType: "UserMessage" })
-        .sort({ CREATEDTIME: 1 })
-        .toArray()
-        .then((data) => res.json({ data }))
-        .catch((error) => res.status(500).send("Internal server error"));
+      const _collection = db.collection(collection);
+      if (collection === "sessions")
+        _collection
+          .find({ SessionID, MessageType: "UserMessage" })
+          .sort({ CREATEDTIME: 1 })
+          .toArray()
+          .then((data) => res.json({ data }))
+          .catch((error) => res.status(500).send("Internal server error"));
+      else
+        _collection
+          .find({ ROWID })
+          .toArray()
+          .then((data) => res.json({ data }))
+          .catch((error) => res.status(500).send("Internal server error"));
     })
     .catch((err) => {
       console.error("Error connecting to the database:", err);
