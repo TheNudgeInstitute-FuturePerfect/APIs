@@ -2,24 +2,28 @@ import express from "express";
 import axios from "axios";
 import GlowLinkTracking from "./models/link.mjs";
 import { isValidObjectId } from "mongoose";
+import { client, connectToDatabase } from "./db.mjs";
 
 const router = express.Router();
 
 router.get("/feedback", async (req, res) => {
   log("GET Glow Feedback");
-  const { action, table, condition } = req.query;
-  if (action && table && condition) {
-    try {
-      const data = await axios.get(
-        `${process.env.DATA_CATALYST_URL}/data?action=${action}&table=${table}&condition=${condition}`
-      );
-      log("Catalyst Response", data.data.length);
-      res.json({ data: data.data });
-    } catch (error) {
-      console.error(error);
+  const { SessionID } = req.query;
+  connectToDatabase()
+    .then(() => {
+      const db = client.db("whatsapp-bots");
+      const collection = db.collection("sessions");
+      collection
+        .find({ SessionID, MessageType: "UserMessage" })
+        .sort({ CREATEDTIME: 1 })
+        .toArray()
+        .then((data) => res.json({ data }))
+        .catch((error) => res.status(500).send("Internal server error"));
+    })
+    .catch((err) => {
+      console.error("Error connecting to the database:", err);
       res.status(500).send("Internal server error");
-    }
-  }
+    });
 });
 
 router.post("/feedback", async (req, res) => {
