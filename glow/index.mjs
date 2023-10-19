@@ -3,6 +3,7 @@ import axios from "axios";
 import GlowLinkTracking from "./models/link.mjs";
 import { isValidObjectId } from "mongoose";
 import { client, connectToDatabase } from "./db.mjs";
+import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get("/feedback", async (req, res) => {
           .catch((error) => res.status(500).send("Internal server error"));
       else
         _collection
-          .find({ ROWID })
+          .find({ ROWID: ObjectId(ROWID) })
           .toArray()
           .then((data) => res.json({ data }))
           .catch((error) => res.status(500).send("Internal server error"));
