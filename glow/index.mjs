@@ -43,13 +43,20 @@ router.post("/feedback", async (req, res) => {
       const db = client.db("whatsapp-bots");
       const _collection = db.collection(collection);
       _collection
-        .updateOne({ _id: new ObjectId(ROWID) }, { set })
+        .findOneAndUpdate(
+          { _id: new ObjectId(ROWID) },
+          { set },
+          {
+            new: true,
+            runValidators: true,
+          }
+        )
         .then((data) => res.json({ data }))
-        .catch((error) => res.status(500).send("Internal server error"));
+        .catch((error) => res.status(500).send(error));
     })
     .catch((err) => {
       console.error("Error connecting to the database:", err);
-      res.status(500).send("Internal server error");
+      res.status(500).send(err);
     });
 });
 
