@@ -38,26 +38,25 @@ router.post("/feedback", async (req, res) => {
   log("POST request received at api glow feedback url");
   const { collection, set, ROWID } = req.body;
 
-  connectToDatabase()
-    .then(() => {
-      const db = client.db("whatsapp-bots");
-      const _collection = db.collection(collection);
-      _collection
-        .findOneAndUpdate(
-          { _id: new ObjectId(ROWID) },
-          { set },
-          {
-            new: true,
-            runValidators: true,
-          }
-        )
-        .then((data) => res.json({ data }))
-        .catch((error) => res.status(500).send(error));
-    })
-    .catch((err) => {
-      console.error("Error connecting to the database:", err);
-      res.status(500).send(err);
-    });
+  connectToDatabase().then(() => {
+    const db = client.db("whatsapp-bots");
+    const _collection = db.collection(collection);
+    _collection
+      .findOneAndUpdate(
+        { _id: new ObjectId(ROWID) },
+        { set },
+        {
+          new: true,
+          runValidators: true,
+        }
+      )
+      .then((data) => res.json({ data }));
+    // .catch((error) => res.status(500).send(error));
+  });
+  // .catch((err) => {
+  //   console.error("Error connecting to the database:", err);
+  //   res.status(500).send(err);
+  // });
 });
 
 router.post("/link/tracking", async (req, res) => {
