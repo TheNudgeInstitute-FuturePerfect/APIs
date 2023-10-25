@@ -44,7 +44,7 @@ router.post("/feedback", async (req, res) => {
     _collection
       .findOneAndUpdate(
         { _id: new ObjectId(ROWID) },
-        { set },
+        { $set: set },
         {
           new: true,
           runValidators: true,
