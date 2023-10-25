@@ -36,7 +36,7 @@ router.get("/feedback", async (req, res) => {
 
 router.post("/feedback", async (req, res) => {
   log("POST request received at api glow feedback url");
-  const { collection, set, ROWID } = req.query;
+  const { collection, set, ROWID } = req.body;
 
   connectToDatabase()
     .then(() => {
